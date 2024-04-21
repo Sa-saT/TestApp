@@ -26,3 +26,4 @@ class BlogPostSerializer(serializers.ModelSerializer):
 #                 raise serializers.ValidationError("ログインが失敗しました")
 #             data['user'] = user
 #         return data
+
