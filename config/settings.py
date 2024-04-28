@@ -33,7 +33,7 @@ ALLOWED_HOSTS = ["*"]
 # Application definition
 
 INSTALLED_APPS = [
-    'django.contrib.admin',
+    # 'django.contrib.admin',
     'django.contrib.auth',
     'django.contrib.contenttypes',
     'django.contrib.sessions',
@@ -44,6 +44,8 @@ INSTALLED_APPS = [
     'rest_framework.authtoken',
     'dj_rest_auth',
     'rest_framework_simplejwt',
+    'djoser',
+    'corsheaders',
 ]
 
 MIDDLEWARE = [
@@ -54,7 +56,10 @@ MIDDLEWARE = [
     'django.contrib.auth.middleware.AuthenticationMiddleware',
     'django.contrib.messages.middleware.MessageMiddleware',
     'django.middleware.clickjacking.XFrameOptionsMiddleware',
+    'corsheaders.middleware.CorsMiddleware',
 ]
+
+CORS_ALLOW_ALL_ORIGINS = True
 
 ROOT_URLCONF = 'config.urls'
 
@@ -132,15 +137,41 @@ DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'
 # DRF
 REST_FRAMEWORK = {
     'DEFAULT_AUTHENTICATION_CLASSES': [
-        'dj_rest_auth.jwt_auth.JWTCookieAuthentication',
+        # 'dj_rest_auth.jwt_auth.JWTCookieAuthentication',
         'rest_framework_simplejwt.authentication.JWTAuthentication',
     ],
 }
 
-# django-rest-framework-simplejwt
-SIMPLE_JWT = {
-    'AUTH_HEADER_TYPES': ('JWT', ),
-    'ACCESS_TOKEN_LIFETIME': timedelta(minutes=30),
+REST_USE_TWT = True
+SITE_ID = 1
+# Djoserの設定
+DJOSER = {
+    'LOGIN_FIELD': 'username',  # ログインに使用するフィールド。デフォルトは'username'。
+    'SERIALIZERS': {
+        # カスタムシリアライザーを使用したい場合は設定します。
+        # 'user_create': 'your_project.serializers.CustomUserCreateSerializer',
+        # 'user': 'your_project.serializers.CustomUserSerializer',
+        # 'current_user': 'your_project.serializers.CustomCurrentUserSerializer',
+        'token_create': 'djoser.serializers.TokenCreateSerializer',  # トークン生成のシリアライザー
+    },
+    'TOKEN_MODEL': 'rest_framework_simplejwt.tokens.AccessToken',  # JWTトークンのモデル
+    'PASSWORD_RESET_CONFIRM_URL': 'password/reset/confirm/{uid}/{token}/',
+    'USERNAME_RESET_CONFIRM_URL': 'username/reset/confirm/{uid}/{token}/',
+    'ACTIVATION_URL': 'activate/{uid}/{token}/',
+    'SEND_ACTIVATION_EMAIL': True,
+    'SOCIAL_AUTH_TOKEN_STRATEGY': 'djoser.social.token.jwt.TokenStrategy',
+    'SOCIAL_AUTH_ALLOWED_REDIRECT_URIS': ['django-insecure-$#1uaey8j6n1!1mndv8c7zlz^26d=knm9tx8&@om@54qb3x!&9'],
+    # その他のDjoser設定を追加できます
 }
 
-REST_USE_TWT = True
+
+# django-rest-framework-simplejwt
+SIMPLE_JWT = {
+    'AUTH_HEADER_TYPES': ('Bearer',),  # JWTトークンを受け取る認証ヘッダータイプ
+    'TOKEN_TYPE_CLAIM': 'typ',
+    'ACCESS_TOKEN_LIFETIME': timedelta(minutes=5),  # アクセストークンの有効期間
+    'REFRESH_TOKEN_LIFETIME': timedelta(days=1),  # リフレッシュトークンの有効期間
+    # その他のSIMPLE_JWT設定を追加できます
+}
+
+AUTH_USER_MODEL = 'api1.CustomUser'
