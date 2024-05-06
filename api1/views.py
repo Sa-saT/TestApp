@@ -7,11 +7,8 @@ from rest_framework import generics, status
 from .serializers import CustomUserSerializer
 from rest_framework_simplejwt.authentication import JWTAuthentication
 from rest_framework.permissions import IsAuthenticated
-# from django.conf import settings
 from django.contrib.auth import get_user_model
 
-
-# User = settings.AUTH_USER_MODEL
 User = get_user_model()
 
 class UserListView(generics.ListCreateAPIView):

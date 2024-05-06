@@ -1,14 +1,19 @@
-from django.urls import path, include
+from django.urls import path, re_path, include
 from . import views
-# from django.contrib import admin
+from django.contrib import admin
 from rest_framework_simplejwt.views import (
     TokenObtainPairView,
     TokenRefreshView
     )
-# from dj_rest_auth.views import LoginView
+from django.views.generic import TemplateView, RedirectView
+from djoser.views import TokenCreateView
+from .views import UserListView
 
+# from dj_rest_auth.views import LoginView
+app_name = 'account'
 
 urlpatterns = [
+    # path('admin/', admin.site.urls),
     # path("blogposts/", views.BlogPostListCreate.as_view(), name="blogpost-view-creste"),
     # path("blogposts/<int:pk>/", views.BlogPostRetrieveUpdateDestory.as_view(), name="update"),
     # path('api-auth/', include('dj_rest_auth.urls')),
@@ -20,5 +25,9 @@ urlpatterns = [
     # path('api/jwt/login/', LoginView.as_view()),
     path('auth/', include('djoser.urls')),
     path('auth/', include('djoser.urls.jwt')),
-    # path('admin/', admin.site.urls),
+    path('admin/', admin.site.urls),
+    path('', TemplateView.as_view(template_name='index.html')),
+    re_path('', RedirectView.as_view(url='auth/')),
+    # path('auth/token/login/', TokenCreateView.as_view(), name='token_create'),  # ログイン用のURL
+    path('user-list-view/', UserListView.as_view()),
 ]

@@ -30,7 +30,7 @@ ALLOWED_HOSTS = ["*"]
 # Application definition
 
 INSTALLED_APPS = [
-    # 'django.contrib.admin',
+    'django.contrib.admin',
     'django.contrib.auth',
     'django.contrib.contenttypes',
     'django.contrib.sessions',
@@ -48,22 +48,20 @@ INSTALLED_APPS = [
 MIDDLEWARE = [
     'django.middleware.security.SecurityMiddleware',
     'django.contrib.sessions.middleware.SessionMiddleware',
+    'corsheaders.middleware.CorsMiddleware',
     'django.middleware.common.CommonMiddleware',
     'django.middleware.csrf.CsrfViewMiddleware',
     'django.contrib.auth.middleware.AuthenticationMiddleware',
     'django.contrib.messages.middleware.MessageMiddleware',
     'django.middleware.clickjacking.XFrameOptionsMiddleware',
-    'corsheaders.middleware.CorsMiddleware',
 ]
-
-CORS_ALLOW_ALL_ORIGINS = True
 
 ROOT_URLCONF = 'config.urls'
 
 TEMPLATES = [
     {
         'BACKEND': 'django.template.backends.django.DjangoTemplates',
-        'DIRS': [],
+        'DIRS': [BASE_DIR / 'templates'],
         'APP_DIRS': True,
         'OPTIONS': {
             'context_processors': [
@@ -157,18 +155,24 @@ DJOSER = {
     'ACTIVATION_URL': 'activate/{uid}/{token}/',
     'SEND_ACTIVATION_EMAIL': False,
     'SOCIAL_AUTH_TOKEN_STRATEGY': 'djoser.social.token.jwt.TokenStrategy',
-    'SOCIAL_AUTH_ALLOWED_REDIRECT_URIS': ['django-insecure-$#1uaey8j6n1!1mndv8c7zlz^26d=knm9tx8&@om@54qb3x!&9'],
+    'SOCIAL_AUTH_ALLOWED_REDIRECT_URIS': [SECRET_KEY],
+    'LOGIN_REDIRECT_URL': '/',  # ログイン後にリダイレクトされるURLを指定
     # その他のDjoser設定を追加できます
 }
 
-
 # django-rest-framework-simplejwt
 SIMPLE_JWT = {
-    'AUTH_HEADER_TYPES': ('Bearer',),  # JWTトークンを受け取る認証ヘッダータイプ
+    'AUTH_HEADER_TYPES': ('JWT',),  # JWTトークンを受け取る認証ヘッダータイプ
     'TOKEN_TYPE_CLAIM': 'typ',
     'ACCESS_TOKEN_LIFETIME': timedelta(minutes=5),  # アクセストークンの有効期間
     'REFRESH_TOKEN_LIFETIME': timedelta(days=1),  # リフレッシュトークンの有効期間
     # その他のSIMPLE_JWT設定を追加できます
 }
+
+CORS_ALLOWED_ORIGINS = [
+'http://127.0.0.1:3000',
+]
+# CORSの許可
+CORS_ALLOW_ALL_ORIGINS: True
 
 AUTH_USER_MODEL = 'api1.CustomUser'
