@@ -7,6 +7,7 @@ from rest_framework_simplejwt.views import (
     )
 from django.views.generic import TemplateView, RedirectView
 from djoser.views import TokenCreateView
+# https://www.youtube.com/watch?v=_IKk553cH2s&t=1550s
 from .views import UserListView
 
 # from dj_rest_auth.views import LoginView
